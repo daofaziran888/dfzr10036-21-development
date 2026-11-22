@@ -24,6 +24,8 @@ from app.services.data_diff import DataDiffService
 from app.services.task_schedule import TaskScheduleService
 from app.services.stream_audit import StreamAuditService
 from app.services.stream_health import StreamHealthService
+from app.services.sink_manifest import SinkManifestService
+from app.services.sink_check import SinkCheckService
 
 SERVICES: dict[str, BaseModuleService] = {
     "cdc_source": CdcSourceService(),
@@ -48,6 +50,8 @@ SERVICES: dict[str, BaseModuleService] = {
     "task_schedule": TaskScheduleService(),
     "stream_audit": StreamAuditService(),
     "stream_health": StreamHealthService(),
+    "sink_manifest": SinkManifestService(),
+    "sink_check": SinkCheckService(),
 }
 
 

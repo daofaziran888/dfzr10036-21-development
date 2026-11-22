@@ -338,4 +338,37 @@ SEED_ROWS: dict[str, list[dict[str, Any]]] = {
             "合规标记": "合规",
         },
     ],
+    # 落盘清单（manifest）：每个数据流的活动版本，冻结版本仍保留可验证身份。
+    "sink_manifest": [
+        {
+            "id": 1, "status": "生效中", "pending": True, "abnormal": False,
+            "清单编号": "MAN-0001", "数据流": "order_events_cdc",
+            "清单版本": "manifest-v1", "版本状态": "活动",
+            "目标载体": "ads.order_events_iceberg", "文件总数": 2,
+            "文件明细": "s3://warehouse/order_events/part-00001.parquet;s3://warehouse/order_events/part-00002.parquet",
+            "登记时间": "2026-11-18 10:30:00",
+        },
+    ],
+    # 落盘数据检查：落盘文件明细 -> 检查结果（无变更/待齐/可提交），作为湖仓提交依据。
+    "sink_check": [
+        {
+            "id": 1, "status": "无变更", "pending": False, "abnormal": False,
+            "检查编号": "SCK-0001", "数据流": "order_events_cdc", "批次": "batch-A",
+            "源端起始位点": "binlog.001234:880000", "源端结束位点": "binlog.001234:885000",
+            "清单版本": "manifest-v0", "期望文件数": 0, "已到文件数": 0,
+            "零行凭据": "zero-row-eot:A:v0", "落盘文件身份": "",
+            "检查结论": "上游零行结束-无变更已确认", "检查时间": "2026-11-18 10:20:00",
+            "快照编号": "",
+        },
+        {
+            "id": 2, "status": "可提交", "pending": True, "abnormal": False,
+            "检查编号": "SCK-0002", "数据流": "order_events_cdc", "批次": "seed-batch",
+            "源端起始位点": "binlog.001234:885000", "源端结束位点": "binlog.001234:890000",
+            "清单版本": "manifest-v1", "期望文件数": 2, "已到文件数": 2,
+            "零行凭据": "",
+            "落盘文件身份": "s3://warehouse/order_events/part-00001.parquet;s3://warehouse/order_events/part-00002.parquet",
+            "检查结论": "清单齐备-可提交湖仓", "检查时间": "2026-11-18 10:31:00",
+            "快照编号": "",
+        },
+    ],
 }
